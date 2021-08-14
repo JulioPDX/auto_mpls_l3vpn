@@ -1,11 +1,13 @@
 from netaddr import IPNetwork
 
-# functions to be used in jinja templates for IP management
-def address(a):
-    a = str(IPNetwork(a).ip)
-    return a
+
+def address(add):
+    "Grab IP from address, example 10.0.0.1/24, will return '10.0.0.1'"
+    add = str(IPNetwork(add).ip)
+    return add
 
 
-def mask(b):
-    b = str(IPNetwork(b).netmask)
-    return b
+def mask(submask):
+    "Grab subnet mask from address, example 10.0.0.1/24, will return '255.255.255.0'"
+    submask = str(IPNetwork(submask).netmask)
+    return submask

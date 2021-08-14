@@ -8,7 +8,6 @@ from nornir_jinja2.plugins.tasks import template_file
 from nornir_napalm.plugins.tasks import napalm_get
 from nornir_utils.plugins.tasks.files import write_file
 from nornir_utils.plugins.functions import print_result
-from rich import print as pretty
 from net_utils import address, mask
 
 
@@ -83,9 +82,9 @@ def main():
     """
 
     nornir = InitNornir(config_file="config.yaml")
-    pretty("Nornir initialized with the following hosts:\n")
+    print("Nornir initialized with the following hosts:\n")
     for host in nornir.inventory.hosts.keys():
-        pretty(f"{host}\n")
+        print(f"{host}\n")
 
     result = nornir.run(task=l3vpn)
 
