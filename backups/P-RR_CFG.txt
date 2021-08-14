@@ -1,0 +1,155 @@
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname P-RR
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
+clock timezone PST -8 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip domain name lab.com
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+mpls label range 300 399
+!
+!
+!
+!
+!
+!
+!
+cts logging verbose
+!
+!
+username cisco privilege 15 password 0 cisco
+!
+redundancy
+!
+!
+ip ssh version 2
+!         
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 5.5.5.5 255.255.255.255
+!
+interface Ethernet0/0
+ ip address 10.0.15.5 255.255.255.0
+ ip ospf network point-to-point
+ mpls ip
+!
+interface Ethernet0/1
+ ip address 10.0.25.5 255.255.255.0
+ ip ospf network point-to-point
+ mpls ip
+!
+interface Ethernet0/2
+ ip address 10.0.35.5 255.255.255.0
+ ip ospf network point-to-point
+ mpls ip
+!
+interface Ethernet0/3
+ ip address 10.0.45.5 255.255.255.0
+ ip ospf network point-to-point
+ mpls ip
+!
+router ospf 1
+ router-id 5.5.5.5
+ network 0.0.0.0 255.255.255.255 area 0
+!
+router bgp 12345
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+ neighbor iBGP peer-group
+ neighbor iBGP remote-as 12345
+ neighbor iBGP update-source Loopback0
+ neighbor 1.1.1.1 peer-group iBGP
+ neighbor 2.2.2.2 peer-group iBGP
+ neighbor 3.3.3.3 peer-group iBGP
+ neighbor 4.4.4.4 peer-group iBGP
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family vpnv4
+  neighbor iBGP send-community extended
+  neighbor iBGP route-reflector-client
+  neighbor 1.1.1.1 activate
+  neighbor 2.2.2.2 activate
+  neighbor 3.3.3.3 activate
+  neighbor 4.4.4.4 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!         
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login local
+ transport input all
+!
+!
+end
