@@ -1,0 +1,9 @@
+router bgp 12345
+{% if data.bgp %}
+ {% for nei in data.bgp.neighbors %}
+ address-family ipv4 vrf {{ nei.vrf_name }}
+  neighbor {{ nei.remote_ip }} remote-as {{ nei.remote_as }}
+  neighbor {{ nei.remote_ip}} activate
+ exit-address-family
+ {% endfor %}
+{% endif %}

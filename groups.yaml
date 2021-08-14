@@ -1,0 +1,16 @@
+---
+pe:
+  platform: ios
+  username: cisco
+  password: cisco
+  data:
+    vrfs:
+      - name: CUSTOMER_789
+        rd: "789:1"
+        rt_import: "789:1"
+        rt_export: "789:1"
+
+      - name: CUSTOMER_777
+        rd: "777:1"
+        rt_import: "777:1"
+        rt_export: "777:1"

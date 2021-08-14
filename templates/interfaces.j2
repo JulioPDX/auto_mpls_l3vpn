@@ -1,0 +1,8 @@
+{% if data.interfaces %}
+{% for int in data.interfaces %}
+interface {{ int.name }}
+ vrf forwarding {{ int.vrf }}
+ ip address {{ address(int.ip) }} {{ mask(int.ip) }}
+!
+{% endfor %}
+{% endif %}
