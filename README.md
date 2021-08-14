@@ -1,5 +1,7 @@
 # Automating MPLS L3VPNs with Nornir
 
+![](pics/auto_mpls.png)
+
 ## Getting Started
 
 ### Clone Repo
