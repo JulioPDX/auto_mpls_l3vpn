@@ -65,7 +65,9 @@ def l3vpn(task):
     )
 
     # Backup because, why not?
-    # backup_result = task.run(name="Get Configuration", task=napalm_get, getters=["config"])
+    # backup_result = task.run(
+    #     name="Get Configuration", task=napalm_get, getters=["config"]
+    # )
 
     # task.run(
     #     task=write_file,
