@@ -3,3 +3,4 @@ nornir-jinja2==0.2.0
 nornir-napalm==0.1.2
 nornir-scrapli==2021.7.30
 nornir-utils==0.1.2
+ntc-templates==2.2.0

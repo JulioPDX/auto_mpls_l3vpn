@@ -1,14 +1,18 @@
 import os
-from nornir import InitNornir
-# from nornir_netmiko import netmiko_send_command
+import yaml
 from rich import print as pretty
+from nornir import InitNornir
 from nornir_scrapli.tasks import send_command
 from ntc_templates.parse import parse_output
 
 
-main_vrfs = ["CUSTOMER_777", "CUSTOMER_789", "MGMT"]
+main_vrfs = []
 
-# pytest -v -s --maxfail=4
+# Create list of VRFs defined in groups filepylint
+with open("groups.yaml") as f:
+    data = yaml.load(f, Loader=yaml.FullLoader)["pe"]["data"]["vrfs"]
+    for vrf in data:
+        main_vrfs.append(vrf["name"])
 
 
 def test_vrf():
@@ -33,39 +37,20 @@ def test_vrf():
         vrf_parsed = parse_output(
             platform="cisco_ios", command="show vrf", data=result[host].result
         )
-        list_of_vrf_values = [value for elem in vrf_parsed for value in elem.values()]
 
+        # Looping over all parsed VRFs to build new list
         for remote_vrf in vrf_parsed:
             remote_vrfs.append(remote_vrf["name"])
-        # print(remote_vrfs)
+
         set_diff = set(main_vrfs) - set(remote_vrfs)
+
+        # If a set difference is found, print the nice red output!
         if set_diff:
-            pretty(f"The following VRFs are not configured on {host}: {set_diff}")
-
-        # for vrf in main_vrfs:
-        #     if vrf in list_of_vrf_values:
-        #         pretty(f"[bold blue]{vrf} VRF is configured on {host}[/bold blue]")
-        #     else:
-        #         pretty(f"[bold red]{vrf} VRF is not configured on {host}[/bold red]")
-
-    # result = nornir.run(
-    #     name="GET VRF",
-    #     task=netmiko_send_command,
-    #     command_string="show vrf",
-    #     use_textfsm=True,
-    # )
-
-    # for host in nornir.inventory.hosts.keys():
-    #     vrf_parsed = result[host].result
-    #     list_of_vrf_values = [value for elem in vrf_parsed for value in elem.values()]
-
-    #     print()
-
-    #     for value in main_vrfs:
-    #         if value in list_of_vrf_values:
-    #             pretty(f"[bold blue]{value} VRF is configured on {host}[/bold blue]")
-    #         else:
-    #             pretty(f"[bold red]{value} VRF is not configured on {host}[/bold red]")
+            pretty(
+                f"[bold red]The following VRFs are not configured on {host}: {set_diff}[/bold red]"
+            )
+        else:
+            pretty(f"[bold blue]All VRF tests passed on router {host}[/bold blue]")
 
 
 if __name__ == "__main__":
