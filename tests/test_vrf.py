@@ -8,7 +8,7 @@ from ntc_templates.parse import parse_output
 
 main_vrfs = []
 
-# Create list of VRFs defined in groups filepylint
+# Create list of VRFs defined in groups.yaml
 with open("groups.yaml") as f:
     data = yaml.load(f, Loader=yaml.FullLoader)["pe"]["data"]["vrfs"]
     for vrf in data:
